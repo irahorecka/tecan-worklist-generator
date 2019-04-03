@@ -94,9 +94,17 @@ if is_correct.lower() == "y":
         out_range = list()
         sample_num_loc = dict_cd[sample_loc[:1].upper() + sample_loc[1:]]
         position = sample_num_loc
+        #define position_dil
+        if 'trough' in dil_type_source.lower():
+            position_dil = 1
+        else:
+            position_dil = position
         
         for index, row in lunatic.iterrows():
             while position < 97:
+                if position_dil > 8:
+                    position_dil = 1
+
                 if type(row['A260 Concentration\n(ng/ul)']) == float:
                     na_list.append(row['Plate\nPosition'])
                     break
@@ -116,7 +124,7 @@ if is_correct.lower() == "y":
                     dna_str += (1*(f"A;{rack_source};;{rack_type_source};{str(position)};;{str('%.2f' % (volume_dna))};;;\n" + 
                                 f"D;{rack_dest};;{rack_type_dest};{str(position)};;{str('%.2f' % (volume_dna))};;;\n") +
                                 "W;\n")
-                    dil_str += (1*(f"A;{dil_source};;{dil_type_source};{str(position)};;{str('%.2f' % volume_dil)};;;\n" +  
+                    dil_str += (1*(f"A;{dil_source};;{dil_type_source};{str(position_dil)};;{str('%.2f' % volume_dil)};;;\n" +  
                                 f"D;{rack_dest};;{rack_type_dest};{str(position)};;{str('%.2f' % volume_dil)};;;\n") +
                                 "W;\n")                
                     break
