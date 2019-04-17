@@ -1,20 +1,23 @@
-#UPDATED: 2019-04-13
+#UPDATED: 2019-04-16
     #Add ability to change dilution location irrespective of lunatic well location [x]
+    #Add ability to change destination well irrespective of source well locaton [x]
+        #Add catches for both if plate range is exceeded [x]
     #Add user input for mixing variability - omit
-    #Add 10% increase in sample volume [x]
+    #Add 10% increase in sample volume - optional [x]
     #Add diluent source name and labware type [x]
 #A;RackLabel;RackID;RackType;Position;TubeID;Volume;LiquidClass;TipType;TipMask;ForcedRackType
 #A;Plate 1;;Costar 3795;54;;500;;;;
-
 import os.path
+os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/dna_dilution_worklist/Backend for production')
+
 import xlrd
 import csv 
 import pandas as pd
 import shutil
-from dna_worklist_front import MyGrid
+from main_front_end import MyGrid
 
 global dilution
-global final_v
+global final_vol
 
 
 csv_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/dna_dilution_worklist/Lunatic csv file'
@@ -66,11 +69,11 @@ def csv_from_excel(filename):
 
 def worklist_gen(df):
     global dilution
-    global final_v
+    global final_vol
     global volume_dil
     df_mod = df
     dilution = float(dilution)
-    final_v = float(final_v)
+    final_vol = float(final_vol)
     #pandas
     lunatic = pd.read_csv(df_mod, sep = ',')
     #change name of column to row of selection (in which case is 1)
@@ -84,8 +87,12 @@ def worklist_gen(df):
     belowconc_list = list()
     below20_list = list()
     out_range = list()
+    out_range_dest = list()
+    dest_diff_list = list()
     sample_num_loc = dict_cd[sample_loc[:1].upper() + sample_loc[1:]]
     position = sample_num_loc
+    dest_num_loc = dict_cd[dest_loc[:1].upper() + dest_loc[1:]]
+    dest_position = dest_num_loc
     #define position dil
     if 'trough' in dil_type_source.lower():
         position_dil = 1
@@ -93,7 +100,7 @@ def worklist_gen(df):
         position_dil = position
     
     for index, row in lunatic.iterrows():
-        while position < 97:
+        while position < 97 and dest_position < 97:
             if 'trough' in dil_type_source.lower():
                 if position_dil > 8:
                     position_dil = 1
@@ -107,23 +114,34 @@ def worklist_gen(df):
                 row_val = float(row['A260 Concentration\n(ng/ul)'])
                 if (dilution/row_val) < 0.2:
                     below20_list.append(row['Plate\nPosition'])
-                volume_dna = 1.1 * ((final_v * dilution) / row_val)
-                volume_dil = final_v - volume_dna
-                if volume_dna > final_v:
-                    volume_dna = final_v
+                volume_dna = 1.1 * ((final_vol * dilution) / row_val)
+                volume_dil = final_vol - volume_dna
+                if volume_dna > final_vol:
+                    volume_dna = final_vol
                     volume_dil = 0
                 
                 dna_str += (1*(f"A;{rack_source};;{rack_type_source};{str(position)};;{str('%.2f' % (volume_dna))};;;\n" + 
-                            f"D;{rack_dest};;{rack_type_dest};{str(position)};;{str('%.2f' % (volume_dna))};;;\n") +
+                            f"D;{rack_dest};;{rack_type_dest};{str(dest_position)};;{str('%.2f' % (volume_dna))};;;\n") +
                             "W;\n")
                 dil_str += (1*(f"A;{dil_source};;{dil_type_source};{str(position_dil)};;{str('%.2f' % volume_dil)};;;\n" +  
-                            f"D;{rack_dest};;{rack_type_dest};{str(position)};;{str('%.2f' % volume_dil)};;;\n") +
+                            f"D;{rack_dest};;{rack_type_dest};{str(dest_position)};;{str('%.2f' % volume_dil)};;;\n") +
                             "W;\n")                
                 break
-        else:
-            out_range += [row['Plate\nPosition']]
+        else:        
+            if position > 96:
+                out_range += ([row['Plate\nPosition']])
+            elif dest_position > 96:
+                dest_diff_list.append(dest_position - 97)
+            else:
+                pass
         position += 1
+        dest_position += 1
         position_dil += 1
+
+    #track which source samples will not be included in destination plate due to exceeding plate range
+    if len(dest_diff_list) != 0:
+        for i in dest_diff_list:
+            out_range_dest += [dict_dc[(96 - i)]]
 
     na_str = ', '.join([i 
         for i in na_list 
@@ -137,8 +155,12 @@ def worklist_gen(df):
     out_range_str = ', '.join([i 
         for i in out_range 
         if out_range[0] != ''])
+    out_range_dest_str = ', '.join([i 
+        for i in out_range_dest[::-1] 
+        if out_range_dest[0] != ''])
 
     warning_str = "" 
+    range_str = ""
     if len(belowconc_str) + len(na_str) != 0:
         warning_str += (20*"-") + "THE FOLLOWING WELLS WILL NOT BE NORMALIZED." + (20*"-") + "\n"
         if len(na_str) != 0:
@@ -149,24 +171,28 @@ def worklist_gen(df):
         warning_str += (10*"-") + "THE FOLLOWING WELLS WILL BE NORMALIZED - PROCEED WITH CAUTION." + (10*"-") + "\n" 
         if len(caut_str) != 0:
             warning_str += "ASP. VOL. < 20% FINAL VOL.: \n" + caut_str
-    if len(out_range_str) != 0:
-        out_range_str = (10*"-") + "THE FOLLOWING WELLS WILL NOT BE NORMALIZED - OUT OF PLATE RANGE." + (10*"-") + "\n" + out_range_str
+    if len(out_range_str) + len(out_range_dest_str) != 0:
+        range_str += (10*"-") + "THE FOLLOWING WELLS WILL NOT BE NORMALIZED - OUT OF PLATE RANGE." + (10*"-") + "\n"
+        if len(out_range_str) != 0:
+            range_str += "THE FOLLOWING SAMPLE(S) MEASURED ON LUNATIC NOT INCLUDED IN WORKLIST: \n" + out_range_str + "\n\n"
+        if len(out_range_dest_str) != 0:
+            range_str += "THE FOLLOWING SAMPLE(S) IN SOURCE PLATE NOT INCLUDED IN DESTINATION PLATE: \n" + out_range_dest_str + "\n\n"
 
-    return(dna_str, dil_str, warning_str, out_range_str)
+    return(dna_str, dil_str, warning_str, range_str)
 
 
 for filename in os.listdir(os.getcwd()):
     new_dir = txt_direct + "/" + str(filename[:-5])
-    '''#if the directory path you want to make is not there, make it. 
-    #override existing directories with new directory
+    #if the directory path you want to make is not there, make it. 
+    '''#override existing directories with new directory
     if os.path.exists(new_dir):
         shutil.rmtree(new_dir)
-    os.makedirs(new_dir)'''
-
+        os.makedirs(new_dir)'''
+        
     #don't override existing directory
     if not os.path.exists(new_dir):
-            os.makedirs(new_dir)
-            dest_direct = new_dir
+        os.makedirs(new_dir)
+        dest_direct = new_dir
     else: 
         pass
 
