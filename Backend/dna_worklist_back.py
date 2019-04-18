@@ -1,4 +1,4 @@
-#UPDATED: 2019-04-16
+#UPDATED: 2019-04-17
     #Add ability to change dilution location irrespective of lunatic well location [x]
     #Add ability to change destination well irrespective of source well locaton [x]
         #Add catches for both if plate range is exceeded [x]
@@ -15,6 +15,9 @@ import csv
 import pandas as pd
 import shutil
 from main_front_end import MyGrid
+#for music chime upon script completion
+'''from pygame import mixer # Load the required library
+import time'''
 
 global dilution
 global final_vol
@@ -125,7 +128,8 @@ def worklist_gen(df):
                             "W;\n")
                 dil_str += (1*(f"A;{dil_source};;{dil_type_source};{str(position_dil)};;{str('%.2f' % volume_dil)};;;\n" +  
                             f"D;{rack_dest};;{rack_type_dest};{str(dest_position)};;{str('%.2f' % volume_dil)};;;\n") +
-                            "W;\n")                
+                            "W;\n")      
+
                 break
         else:        
             if position > 96:
@@ -182,47 +186,53 @@ def worklist_gen(df):
 
 
 for filename in os.listdir(os.getcwd()):
-    new_dir = txt_direct + "/" + str(filename[:-5])
-    #if the directory path you want to make is not there, make it. 
-    '''#override existing directories with new directory
-    if os.path.exists(new_dir):
-        shutil.rmtree(new_dir)
-        os.makedirs(new_dir)'''
-        
-    #don't override existing directory
-    if not os.path.exists(new_dir):
-        os.makedirs(new_dir)
-        dest_direct = new_dir
-    else: 
-        pass
-
-    #write dna and dil volume and store them in the newly created directory
     if filename[-5:] == '.xlsx':
+        new_direct = txt_direct + "/" + str(filename[:-5])
+        #if the directory path you want to make is not there, make it. 
+        '''#override existing directories with new directory
+        if os.path.exists(new_direct):
+            shutil.rmtree(new_direct)
+            os.makedirs(new_direct)'''
+
+        #don't override existing directory
+        if not os.path.exists(new_direct):
+                os.makedirs(new_direct)
+        else: 
+            pass
+
+        #write dna and dil volume and store them in the newly created directory
         csv_from_excel(filename)
         csv_file = os.path.join(csv_direct, str(filename[:-5]) + '.csv')
         dna, dil ,warn, out = worklist_gen(csv_file)
         if dna != "":
-            dna_txt = os.path.join(new_dir, 'DNA_TECAN.gwl')
+            dna_txt = os.path.join(new_direct, 'DNA_TECAN.gwl')
             dna_file= open(dna_txt, "w+")
             dna_file.write(dna)
             dna_file.close()
         if dil != "":
-            dil_txt = os.path.join(new_dir, 'DIL_TECAN.gwl')
+            dil_txt = os.path.join(new_direct, 'DIL_TECAN.gwl')
             dil_file = open(dil_txt, "w+")
             dil_file.write(dil)
             dil_file.close()
         if warn != "":
             #adds warning .txt file for ommitted and advisory DNA samples (in plate coord.)
-            caut_txt = os.path.join(new_dir, 'WARNING.txt')
+            caut_txt = os.path.join(new_direct, 'WARNING.txt')
             caut_file = open(caut_txt, "w+")
             caut_file.write(warn)
             caut_file.close()
         if out != "":
             #adds .txt file for samples that exceeded destination plate range from Lunatic plate.
-            out_txt = os.path.join(new_dir, 'RANGE_FAIL.txt')
+            out_txt = os.path.join(new_direct, 'RANGE_FAIL.txt')
             out_file = open(out_txt, "w+")
             out_file.write(out)
             out_file.close()
 
     else:
         pass
+
+#add chime once script completes! I recommend anything ~ 1 second in duration.
+'''mixer.init()
+mixer.music.load('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/silly_projects/mp3/Trimmed everybody wants to rule the world.mp3')
+mixer.music.play()
+time.sleep(1.2)
+mixer.music.stop()'''
