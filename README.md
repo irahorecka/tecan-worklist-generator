@@ -1,2 +1,2 @@
-# DNA-dilution-worklist
-A DNA dilution worklist that reads DNA concentration measurements from Unchained Labs Lunatic Analytics software and converts the .xlsx file into a dilution worklist that is read on TECAN's Freedom Evoware software.
+# TECAN DNA and Protein Dilution Worklist
+A desktop application that converts DNA (A260) or Protein (A280) concentration measurements from .xlsx files generated in Unchained Labs Lunatic Analytics software into a dilution worklist that is read on TECAN's Freedom Evoware software.
