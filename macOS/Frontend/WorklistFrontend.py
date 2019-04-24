@@ -11,7 +11,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.graphics import Rectangle, Color
 
-image_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images'
 front_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend'
 back_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend'
 
