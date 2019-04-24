@@ -15,34 +15,36 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.graphics import Rectangle, Color
 
+image_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images'
+front_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend'
+back_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend'
 
-class HeaderFromat:
+class FontSize:
     def __init__(self):
-        self.color = (1.00, 1.00, 1.00, 1.00)
-        self.header_font_size = 32
-        self.subheader_font_size = 25
+        self.header_size = 32
+        self.subheader_size = 25
+        self.label_size = 17
+        self.bttn_size = 35
 
-class LabelFormat:
+class ColorFormat:
     def __init__(self):
-        self.color = (1.00, 1.00, 1.00, 1.00)
-        self.font_size = 17
+        self.bttn_bckgrd_color = (0.11, 0.28, 0.32, 1.00)
+        self.scrn_bckgrd_color = (0.00,0.50,0.50,1.00)
+        self.bttn_bck_color = (0.85, 0.09, 0.05, 1.00)
+        self.bttn_fwd_color = (0.29, 0.55, 0.76, 1.00)
+        self.label_color = (1.00, 1.00, 1.00, 1.00)
+        self.header_color = (1.00, 1.00, 1.00, 1.00)
 
-class ButtonFormat:
-    def __init__(self):
-        self.font_size = 35
-        self.bck_color = (0.11, 0.28, 0.32, 1.00)
-        self.back_color = (0.85, 0.09, 0.05, 1.00)
-        self.forward_color = (0.29, 0.55, 0.76, 1.00)
+fontsize = FontSize()
+colorformat = ColorFormat()
 
 class WorklistGenerator(GridLayout):
     def __init__(self, **kwargs):
         super(WorklistGenerator, self).__init__(**kwargs)
         #adds fixed color to kivy background - it works thank god.
         with self.canvas:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images')
-            self.rect = Rectangle(source='background_blue.png', pos=self.pos, size=self.size)
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
-            
+            Color(rgba = colorformat.scrn_bckgrd_color)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self.update_rect,
                 size=self.update_rect)
 
@@ -63,31 +65,28 @@ class WorklistGenerator(GridLayout):
 
         self.cols = 1
 
-        button_label = ButtonFormat()
-        header_format = HeaderFromat()
-
         self.inside1.add_widget(Label(text = ""))
         self.inside2.add_widget(Label(text = ""))
         self.inside3.add_widget(Label(text = ""))
         self.inside4.add_widget(Label(text = ""))
 
-        self.dna_select = Button(text = "[b]DNA[/b]", markup = True, color = button_label.forward_color, 
+        self.dna_select = Button(text = "[b]DNA[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.dna_select.bind(on_press = self.dna)
         self.inside.add_widget(self.dna_select)
 
-        self.protein_select = Button(text = "[b]PROTEIN[/b]", markup = True, color = button_label.forward_color, 
+        self.protein_select = Button(text = "[b]PROTEIN[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.protein_select.bind(on_press = self.protein)
         self.inside.add_widget(self.protein_select)
 
         self.add_widget(self.inside1)
         self.add_widget(self.inside2)
-        self.add_widget(Label(text = "[b][i]TECAN Normalization Worklist Generator[/i][/b]", markup = True, color = header_format.color, font_size = header_format.header_font_size))
+        self.add_widget(Label(text = "[b][i]TECAN Normalization Worklist Generator[/i][/b]", markup = True, color = colorformat.header_color, font_size = fontsize.header_size))
         #self.add_widget(Label(text = "[b][u]select molecule[/u][/b]", markup = True, color = header_format.color, font_size = header_format.subheader_font_size))
         self.add_widget(self.inside3)
         self.add_widget(self.inside4)
@@ -114,9 +113,8 @@ class SeqYes(GridLayout):
         super(SeqYes, self).__init__(**kwargs)
         #adds fixed color to kivy background - it works thank god.
         with self.canvas:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images')
-            self.rect = Rectangle(source='background_blue.png', pos=self.pos, size=self.size)
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+            Color(rgba = colorformat.scrn_bckgrd_color)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self.update_rect,
                 size=self.update_rect)
 
@@ -134,50 +132,47 @@ class SeqYes(GridLayout):
 
         self.cols = 1
 
-        user_label = LabelFormat()
-        button_label = ButtonFormat()
-
         self.inside0.add_widget(Label(text = "[b]Sequencing Company (Sequetech)[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.seqcompany = TextInput(text = "Sequetech", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.seqcompany = TextInput(text = "Sequetech", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.seqcompany)
 
         self.inside0.add_widget(Label(text = "[b]Volume DNA for Sequencing (uL)[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.sequencevol = TextInput(text = "10", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sequencevol = TextInput(text = "10", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.sequencevol)
         
         self.inside1.add_widget(Label(text = "[b]Forward Primer Name[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.fwdprimer = TextInput(text = "P0074_F", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.fwdprimer = TextInput(text = "P0074_F", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.fwdprimer)
 
         self.inside1.add_widget(Label(text = "[b]Reverse Primer Name[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.revprimer = TextInput(text = "P0075_R", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.revprimer = TextInput(text = "P0075_R", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.revprimer)
 
         self.inside2.add_widget(Label(text = "[b]Sequence Plate Name[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.seqname = TextInput(text = "Sequence Plate", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.seqname = TextInput(text = "Sequence Plate", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.seqname)
 
         self.inside2.add_widget(Label(text = "[b]Sequence Plate Labware[/b]", markup = True, 
-        color = user_label.color, font_size = user_label.font_size))
-        self.seqtype = TextInput(text = "VWR HalfSkirt Plate", multiline = False, font_size = user_label.font_size)
+        color = colorformat.label_color, font_size = fontsize.label_size))
+        self.seqtype = TextInput(text = "VWR HalfSkirt Plate", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.seqtype)
 
-        self.back = Button(text = "[b]BACK[/b]", markup = True, color = button_label.back_color, 
+        self.back = Button(text = "[b]BACK[/b]", markup = True, color = colorformat.bttn_bck_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.back.bind(on_press = self.pressed_back)
         self.inside3.add_widget(self.back)
 
-        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = button_label.forward_color, 
+        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.submit.bind(on_press = self.pressed)
         self.inside3.add_widget(self.submit)
 
@@ -220,9 +215,8 @@ class SeqPrompt(GridLayout):
         super(SeqPrompt, self).__init__(**kwargs)
         #adds fixed color to kivy background - it works thank god.
         with self.canvas:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images')
-            self.rect = Rectangle(source='background_blue.png', pos=self.pos, size=self.size)
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+            Color(rgba = colorformat.scrn_bckgrd_color)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self.update_rect,
                 size=self.update_rect)
 
@@ -243,39 +237,35 @@ class SeqPrompt(GridLayout):
 
         self.cols = 1
 
-        button_label = ButtonFormat()
-        header_format = HeaderFromat()
-
-
         self.inside1.add_widget(Label(text = ""))
         self.inside2.add_widget(Label(text = ""))
         self.inside3.add_widget(Label(text = ""))
         self.inside4.add_widget(Label(text = ""))
 
-        self.back = Button(text = "[b]BACK[/b]", markup = True, color = button_label.back_color, 
+        self.back = Button(text = "[b]BACK[/b]", markup = True, color = colorformat.bttn_bck_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.back.bind(on_press = self.pressed_back)
         self.inside.add_widget(self.back)
 
-        self.no_seq = Button(text = "[b]NO[/b]", markup = True, color = button_label.forward_color, 
+        self.no_seq = Button(text = "[b]NO[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.no_seq.bind(on_press = self.no)
         self.inside.add_widget(self.no_seq)
 
-        self.yes_seq = Button(text = "[b]YES[/b]", markup = True, color = button_label.forward_color, 
+        self.yes_seq = Button(text = "[b]YES[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.yes_seq.bind(on_press = self.yes)
         self.inside.add_widget(self.yes_seq)
 
         self.add_widget(self.inside1)
         self.add_widget(self.inside2)
-        self.add_widget(Label(text = "[b]Would you like to make a sequencing plate?[/b]", markup = True, color = header_format.color, font_size = header_format.header_font_size))
+        self.add_widget(Label(text = "[b]Would you like to make a sequencing plate?[/b]", markup = True, color = colorformat.header_color, font_size = fontsize.header_size))
         self.add_widget(self.inside3)
         self.add_widget(self.inside4)
         self.add_widget(self.inside)
@@ -308,9 +298,8 @@ class DNAFront(GridLayout):
 
         #adds fixed color to kivy background - it works thank god.
         with self.canvas:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images')
-            self.rect = Rectangle(source='background_blue.png', pos=self.pos, size=self.size)
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+            Color(rgba = colorformat.scrn_bckgrd_color)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self.update_rect,
                 size=self.update_rect)
 
@@ -337,68 +326,65 @@ class DNAFront(GridLayout):
         self.inside6 = GridLayout()
         self.inside6.cols = 2
 
-        user_label = LabelFormat()
-        button_label = ButtonFormat()
-
-        self.inside0.add_widget(Label(text = "[b]TECAN DNA Elution Volume[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.elutionvol = TextInput(text = "100", multiline = False, font_size = user_label.font_size)
+        self.inside0.add_widget(Label(text = "[b]TECAN DNA Elution Volume[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.elutionvol = TextInput(text = "100", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.elutionvol)
         
-        self.inside0.add_widget(Label(text = "[b]Dilution Type (TE or Water)[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.diltype = TextInput(text = "Water", multiline = False, font_size = user_label.font_size)
+        self.inside0.add_widget(Label(text = "[b]Dilution Type (TE or Water)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.diltype = TextInput(text = "Water", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.diltype)
         
-        self.inside1.add_widget(Label(text = "[b]Source Well[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcewell = TextInput(text = "A1", multiline = False, font_size = user_label.font_size)
+        self.inside1.add_widget(Label(text = "[b]Source Well[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcewell = TextInput(text = "A1", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.sourcewell)
 
-        self.inside1.add_widget(Label(text = "[b]Sample Source Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcename = TextInput(text = "Source Rack", multiline = False, font_size = user_label.font_size)
+        self.inside1.add_widget(Label(text = "[b]Sample Source Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcename = TextInput(text = "Source Rack", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.sourcename)
 
-        self.inside2.add_widget(Label(text = "[b]Sample Source Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcelab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = user_label.font_size)
+        self.inside2.add_widget(Label(text = "[b]Sample Source Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcelab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.sourcelab)
 
-        self.inside2.add_widget(Label(text = "[b]Destination Well[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destwell = TextInput(text = "A1", multiline = False, font_size = user_label.font_size)
+        self.inside2.add_widget(Label(text = "[b]Destination Well[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destwell = TextInput(text = "A1", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.destwell)
 
-        self.inside3.add_widget(Label(text = "[b]Destination Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destname = TextInput(text = "Destination Rack", multiline = False, font_size = user_label.font_size)
+        self.inside3.add_widget(Label(text = "[b]Destination Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destname = TextInput(text = "Destination Rack", multiline = False, font_size = fontsize.label_size)
         self.inside3.add_widget(self.destname)
 
-        self.inside3.add_widget(Label(text = "[b]Destination Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destlab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = user_label.font_size)
+        self.inside3.add_widget(Label(text = "[b]Destination Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destlab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = fontsize.label_size)
         self.inside3.add_widget(self.destlab)
 
-        self.inside4.add_widget(Label(text = "[b]Diluent Source Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.dilname = TextInput(text = "TE Diluent", multiline = False, font_size = user_label.font_size)
+        self.inside4.add_widget(Label(text = "[b]Diluent Source Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.dilname = TextInput(text = "TE Diluent", multiline = False, font_size = fontsize.label_size)
         self.inside4.add_widget(self.dilname)
 
-        self.inside4.add_widget(Label(text = "[b]Diluent Source Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.dilsource = TextInput(text = "Trough 100ml", multiline = False, font_size = user_label.font_size)
+        self.inside4.add_widget(Label(text = "[b]Diluent Source Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.dilsource = TextInput(text = "Trough 100ml", multiline = False, font_size = fontsize.label_size)
         self.inside4.add_widget(self.dilsource)
 
-        self.inside5.add_widget(Label(text = "[b]Desired Concentration (ng.uL)[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.concentration = TextInput(text = "200", multiline = False, font_size = user_label.font_size)
+        self.inside5.add_widget(Label(text = "[b]Desired Concentration (ng.uL)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.concentration = TextInput(text = "200", multiline = False, font_size = fontsize.label_size)
         self.inside5.add_widget(self.concentration)
 
-        self.inside5.add_widget(Label(text = "[b]Desired Final Volume (uL)[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.final_v = TextInput(text = "50", multiline = False, font_size = user_label.font_size)
+        self.inside5.add_widget(Label(text = "[b]Desired Final Volume (uL)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.final_v = TextInput(text = "50", multiline = False, font_size = fontsize.label_size)
         self.inside5.add_widget(self.final_v)
 
-        self.back = Button(text = "[b]BACK[/b]", markup = True, color = button_label.back_color, 
+        self.back = Button(text = "[b]BACK[/b]", markup = True, color = colorformat.bttn_bck_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.back.bind(on_press = self.pressed_back)
         self.inside6.add_widget(self.back)
 
-        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = button_label.forward_color, 
+        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.submit.bind(on_press = self.pressed)
         self.inside6.add_widget(self.submit)
 
@@ -448,7 +434,7 @@ class DNAFront(GridLayout):
                 reset()
             else:
                 try:
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
+                    os.chdir(back_direct)
                     global sequence_vol 
                     global seq_company 
                     global fwd_primer
@@ -458,7 +444,7 @@ class DNAFront(GridLayout):
                     type(sequence_vol)
                     exec(open("SeqDNABackend.py").read(), globals(), globals())
                 except NameError:
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
+                    os.chdir(back_direct)
                     exec(open("DNABackend.py").read(), globals(), globals())
         
         self.elutionvol.text = "Thanks for using! Please close window."
@@ -486,7 +472,7 @@ class DNAFront(GridLayout):
                     global rev_primer
                     global rack_seq 
                     global rack_type_seq 
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+                    os.chdir(front_direct)
                     #this is a workaround to returning to main sequence prompt if no sequence was selected
                     type(sequence_vol)
                     del sequence_vol
@@ -494,21 +480,21 @@ class DNAFront(GridLayout):
                     WorklistGeneratorApp().run()
                     reset()
                 except NameError:
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+                    os.chdir(front_direct)
                     App.get_running_app().stop()
                     WorklistGeneratorApp().run()
                     reset()
                 
             else:
                 try:
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+                    os.chdir(front_direct)
                     type(sequence_vol)
                     del sequence_vol
                     App.get_running_app().stop()
                     SeqYesApp().run()
                     reset()
                 except NameError:
-                    os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+                    os.chdir(front_direct)
                     App.get_running_app().stop()
                     SeqPromptApp().run()
                     reset()
@@ -519,9 +505,8 @@ class ProtFront(GridLayout):
 
         #adds fixed color to kivy background - it works thank god.
         with self.canvas:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend/Images')
-            self.rect = Rectangle(source='background_blue.png', pos=self.pos, size=self.size)
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+            Color(rgba = colorformat.scrn_bckgrd_color)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self.update_rect,
                 size=self.update_rect)
 
@@ -544,61 +529,58 @@ class ProtFront(GridLayout):
 
         self.inside6 = GridLayout()
         self.inside6.cols = 2
-
-        user_label = LabelFormat()
-        button_label = ButtonFormat()
         
-        self.inside1.add_widget(Label(text = "[b]Source Well[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcewell = TextInput(text = "A1", multiline = False, font_size = user_label.font_size)
+        self.inside1.add_widget(Label(text = "[b]Source Well[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcewell = TextInput(text = "A1", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.sourcewell)
 
-        self.inside1.add_widget(Label(text = "[b]Sample Source Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcename = TextInput(text = "Source Rack", multiline = False, font_size = user_label.font_size)
+        self.inside1.add_widget(Label(text = "[b]Sample Source Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcename = TextInput(text = "Source Rack", multiline = False, font_size = fontsize.label_size)
         self.inside1.add_widget(self.sourcename)
 
-        self.inside2.add_widget(Label(text = "[b]Sample Source Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.sourcelab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = user_label.font_size)
+        self.inside2.add_widget(Label(text = "[b]Sample Source Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.sourcelab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.sourcelab)
 
-        self.inside2.add_widget(Label(text = "[b]Destination Well[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destwell = TextInput(text = "A1", multiline = False, font_size = user_label.font_size)
+        self.inside2.add_widget(Label(text = "[b]Destination Well[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destwell = TextInput(text = "A1", multiline = False, font_size = fontsize.label_size)
         self.inside2.add_widget(self.destwell)
 
-        self.inside3.add_widget(Label(text = "[b]Destination Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destname = TextInput(text = "Destination Rack", multiline = False, font_size = user_label.font_size)
+        self.inside3.add_widget(Label(text = "[b]Destination Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destname = TextInput(text = "Destination Rack", multiline = False, font_size = fontsize.label_size)
         self.inside3.add_widget(self.destname)
 
-        self.inside3.add_widget(Label(text = "[b]Destination Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.destlab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = user_label.font_size)
+        self.inside3.add_widget(Label(text = "[b]Destination Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.destlab = TextInput(text = "96 Well ThermoMatrixRack", multiline = False, font_size = fontsize.label_size)
         self.inside3.add_widget(self.destlab)
 
-        self.inside4.add_widget(Label(text = "[b]Diluent Source Name[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.dilname = TextInput(text = "TE Diluent", multiline = False, font_size = user_label.font_size)
+        self.inside4.add_widget(Label(text = "[b]Diluent Source Name[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.dilname = TextInput(text = "TE Diluent", multiline = False, font_size = fontsize.label_size)
         self.inside4.add_widget(self.dilname)
 
-        self.inside4.add_widget(Label(text = "[b]Diluent Source Labware[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.dilsource = TextInput(text = "Trough 100ml", multiline = False, font_size = user_label.font_size)
+        self.inside4.add_widget(Label(text = "[b]Diluent Source Labware[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.dilsource = TextInput(text = "Trough 100ml", multiline = False, font_size = fontsize.label_size)
         self.inside4.add_widget(self.dilsource)
 
-        self.inside5.add_widget(Label(text = "[b]Desired Concentration (mg.mL)[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.concentration = TextInput(text = "0.20", multiline = False, font_size = user_label.font_size)
+        self.inside5.add_widget(Label(text = "[b]Desired Concentration (mg.mL)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.concentration = TextInput(text = "0.20", multiline = False, font_size = fontsize.label_size)
         self.inside5.add_widget(self.concentration)
 
-        self.inside5.add_widget(Label(text = "[b]Desired Final Volume (uL)[/b]", markup = True, color = user_label.color, font_size = user_label.font_size))
-        self.final_v = TextInput(text = "50", multiline = False, font_size = user_label.font_size)
+        self.inside5.add_widget(Label(text = "[b]Desired Final Volume (uL)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.final_v = TextInput(text = "50", multiline = False, font_size = fontsize.label_size)
         self.inside5.add_widget(self.final_v)
 
-        self.back = Button(text = "[b]BACK[/b]", markup = True, color = button_label.back_color, 
+        self.back = Button(text = "[b]BACK[/b]", markup = True, color = colorformat.bttn_bck_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.back.bind(on_press = self.pressed_back)
         self.inside6.add_widget(self.back)
 
-        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = button_label.forward_color, 
+        self.submit = Button(text = "[b]SUBMIT[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
-        background_color = button_label.bck_color,
-        font_size = button_label.font_size)
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
         self.submit.bind(on_press = self.pressed)
         self.inside6.add_widget(self.submit)
 
@@ -642,7 +624,7 @@ class ProtFront(GridLayout):
                 App.get_running_app().stop()
                 reset()
             else:
-                os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
+                os.chdir(back_direct)
                 exec(open("ProtBackend.py").read(), globals(), globals())
         
         self.sourcename.text = ""
@@ -660,7 +642,7 @@ class ProtFront(GridLayout):
 
     def pressed_back(self, instance):        
         if instance:
-            os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Frontend')
+            os.chdir(front_direct)
             App.get_running_app().stop()
             WorklistGeneratorApp().run()
             reset()
