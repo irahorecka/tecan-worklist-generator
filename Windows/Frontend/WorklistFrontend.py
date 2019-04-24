@@ -4,6 +4,9 @@ kivy.require("1.10.1")
 
 from kivy.config import Config
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+#Resizing application windows to troubleshoot a kivy interface problem in Windows (use in macOS, as well).
+Config.set('graphics', 'resizable', 0)
+Config.set('graphics', 'borderless', 0)
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -44,7 +47,7 @@ class WorklistGenerator(GridLayout):
                 size=self.update_rect)
 
         self.inside = GridLayout()
-        self.inside.cols = 2
+        self.inside.cols = 3
 
         self.inside1 = GridLayout()
         self.inside1.cols = 1
@@ -64,6 +67,13 @@ class WorklistGenerator(GridLayout):
         self.inside2.add_widget(Label(text = ""))
         self.inside3.add_widget(Label(text = ""))
         self.inside4.add_widget(Label(text = ""))
+
+        self.close_select = Button(text = "[b]CLOSE[/b]", markup = True, color = colorformat.bttn_bck_color, 
+        background_normal = '', 
+        background_color = colorformat.bttn_bckgrd_color,
+        font_size = fontsize.bttn_size)
+        self.close_select.bind(on_press = self.close)
+        self.inside.add_widget(self.close_select)
 
         self.dna_select = Button(text = "[b]DNA[/b]", markup = True, color = colorformat.bttn_fwd_color, 
         background_normal = '', 
@@ -86,6 +96,11 @@ class WorklistGenerator(GridLayout):
         self.add_widget(self.inside3)
         self.add_widget(self.inside4)
         self.add_widget(self.inside)
+
+    def close(self, instance):
+        if instance:
+            App.get_running_app().stop()
+            reset()
 
     def dna(self, instance):
         if instance:
@@ -456,7 +471,9 @@ class DNAFront(GridLayout):
         self.concentration.text = ""
         self.final_v.text = ""
         self.submit.text = "[b]CLOSE[/b]"
+        self.submit.color = colorformat.bttn_bck_color
         self.back.text = "[b]HOME[/b]"
+        self.back.color = colorformat.bttn_fwd_color
 
     def pressed_back(self, instance):        
         if instance:
@@ -634,7 +651,9 @@ class ProtFront(GridLayout):
         self.concentration.text = ""
         self.final_v.text = ""
         self.submit.text = "[b]CLOSE[/b]"
+        self.submit.color = colorformat.bttn_bck_color
         self.back.text = "[b]HOME[/b]"
+        self.back.color = colorformat.bttn_fwd_color
 
     def pressed_back(self, instance):        
         if instance:
