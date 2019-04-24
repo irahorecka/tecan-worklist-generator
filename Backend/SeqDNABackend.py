@@ -1,14 +1,3 @@
-#UPDATED: 2019-04-17
-    #Add ability to change dilution location irrespective of lunatic well location [x]
-    #Add user input for mixing variability - omit
-    #Add 10% increase in sample volume [x]
-    #Add diluent source name and labware type [x]
-#A;RackLabel;RackID;RackType;Position;TubeID;Volume;LiquidClass;TipType;TipMask;ForcedRackType
-#A;Plate 1;;Costar 3795;54;;500;;;;
-
-#TO DO: Make a sequencing plate (check) with a front end that asks for a sequencing plate req - if yes, divert to this backend, if no, divert to original backend.
-#front end with a sequence desire will introduce new variables and QC file for users to send sequences out to sequetech in one click.
-
 import os.path
 os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
 
