@@ -1,12 +1,3 @@
-#UPDATED: 2019-04-21 for PROTEIN
-    #Add ability to change dilution location irrespective of lunatic well location [x]
-    #Add ability to change destination well irrespective of source well locaton [x]
-        #Add catches for both if plate range is exceeded [x]
-    #Add user input for mixing variability - omit
-    #Add 10% increase in sample volume - optional [x]
-    #Add diluent source name and labware type [x]
-#A;RackLabel;RackID;RackType;Position;TubeID;Volume;LiquidClass;TipType;TipMask;ForcedRackType
-#A;Plate 1;;Costar 3795;54;;500;;;;
 import os.path
 os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
 
