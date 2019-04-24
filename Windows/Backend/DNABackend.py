@@ -1,3 +1,6 @@
+import os.path
+os.chdir(r'C:\\Harddrive_Desktop\\Python\\TECAN_Worklist\\Microsoft\\Backend')
+
 import xlrd
 import csv 
 import pandas as pd
