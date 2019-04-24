@@ -1,7 +1,3 @@
-#modified 2019-04-22 to add selection for DNA or protein normalization [x]
-#add classes for button, header, and label colors and sizes [x]
-#figure out a way to include a 'back' button for child app to allow homepage selection [x]
-
 import os
 import kivy
 kivy.require("1.10.1")
