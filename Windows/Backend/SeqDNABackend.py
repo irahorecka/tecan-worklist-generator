@@ -257,4 +257,4 @@ for filename in os.listdir(os.getcwd()):
             out_file.write(out)
             out_file.close()
     else:
-        pass
+        continue
