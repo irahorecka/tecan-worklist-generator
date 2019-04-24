@@ -4,7 +4,6 @@ os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Back
 import xlrd
 import csv 
 import pandas as pd
-import shutil
 import WorklistFrontend
 
 global elution_vol
@@ -258,4 +257,4 @@ for filename in os.listdir(os.getcwd()):
             out_file.write(out)
             out_file.close()
     else:
-        pass
+        continue
