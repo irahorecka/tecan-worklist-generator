@@ -52,11 +52,8 @@ def csv_from_excel(filename):
     csv_file = os.path.join(csv_direct, str(filename[:-5]) + '.csv')
     try:
         wb = xlrd.open_workbook(filename)
-        #find excel sheet of interest
         sh = wb.sheet_by_name('Report')
-        #open for writing ('w') and for generating new files ('+')
         your_csv_file = open(csv_file, 'w+', newline = '')
-        #set csv writer and write rows
         wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
 
         for rownum in range(sh.nrows):
@@ -85,11 +82,8 @@ def worklist_gen(df):
     dilution = float(dilution)
     final_vol = float(final_vol)
     sequence_vol = float(sequence_vol)
-    #pandas
     lunatic = pd.read_csv(df_mod, sep = ',')
-    #change name of column to row of selection (in which case is 1)
     lunatic.columns = lunatic.iloc[15]
-    #remove columns using range 
     lunatic = lunatic.drop(lunatic.index[range(0,16)])
 
     dna_str = ""
@@ -151,6 +145,7 @@ def worklist_gen(df):
                     seqtech_list.append(f"{dict_dc[position]},{dict_dc[position]},{fwd_primer} \n") 
                     seqtech_list.append(f"{dict_dc[position]},{dict_dc[position]},{rev_primer} \n")   
 
+                position_dil += 1
                 break
         else:
             if position > 96:
@@ -161,7 +156,6 @@ def worklist_gen(df):
                 pass
         position += 1
         dest_position += 1
-        position_dil += 1
 
     #track which source samples will not be included in destination plate due to exceeding plate range
     if len(dest_diff_list) != 0:
