@@ -41,7 +41,7 @@ class Sequence_csv:
         self.title = f"{self.company}_{str(self.csv_name[:-5])}.csv"
 
     def csv_writer(self):
-        with open(self.title,'w') as csv_file:
+        with open(self.title,'w',newline = '') as csv_file:
             writer = csv.writer(csv_file, delimiter = ',')
             writer.writerows([i.split(',') for i in self.lst])
         csv_file.close()
