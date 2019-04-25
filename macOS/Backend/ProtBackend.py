@@ -40,7 +40,7 @@ def csv_from_excel(filename):
         #find excel sheet of interest
         sh = wb.sheet_by_name('Report')
         #open for writing ('w') and for generating new files ('+')
-        your_csv_file = open(csv_file, 'w+')
+        your_csv_file = open(csv_file, 'w+', newline = '')
         #set csv writer and write rows
         wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
 
