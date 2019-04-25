@@ -1,5 +1,5 @@
 import os.path
-os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Backend')
+os.chdir('/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/macOS/Backend')
 
 import xlrd
 import csv 
@@ -10,9 +10,9 @@ global dilution
 global final_vol
 
 
-csv_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Lunatic csv file'
-txt_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/TECAN gwl file'
-xlsx_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/Lunatic xlsx file'
+csv_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/macOS/Lunatic csv file'
+txt_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/macOS/TECAN gwl file'
+xlsx_direct = '/Users/irahorecka/Desktop/Harddrive_Desktop/Python/TECAN_Worklist/macOS/Lunatic xlsx file'
 os.chdir(xlsx_direct)
 
 dict_cd = {'A1': 1, 'B1': 2,'C1': 3,'D1': 4,'E1': 5,'F1': 6,'G1': 7,'H1': 8,'A2': 9,'B2': 10,'C2': 11,'D2': 12,'E2': 13,'F2': 14,
@@ -37,11 +37,8 @@ def csv_from_excel(filename):
     csv_file = os.path.join(csv_direct, str(filename[:-5]) + '.csv')
     try:
         wb = xlrd.open_workbook(filename)
-        #find excel sheet of interest
         sh = wb.sheet_by_name('Report')
-        #open for writing ('w') and for generating new files ('+')
         your_csv_file = open(csv_file, 'w+', newline = '')
-        #set csv writer and write rows
         wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
 
         for rownum in range(sh.nrows):
@@ -114,8 +111,9 @@ def worklist_gen(df):
                             "W;\n")
                 dil_str += (1*(f"A;{dil_source};;{dil_type_source};{str(position_dil)};;{str('%.2f' % volume_dil)};;;\n" +  
                             f"D;{rack_dest};;{rack_type_dest};{str(dest_position)};;{str('%.2f' % volume_dil)};;;\n") +
-                            "W;\n")      
-
+                            "W;\n")
+                                      
+                position_dil += 1
                 break
         else:        
             if position > 96:
@@ -126,7 +124,6 @@ def worklist_gen(df):
                 pass
         position += 1
         dest_position += 1
-        position_dil += 1
 
     #track which source samples will not be included in destination plate due to exceeding plate range
     if len(dest_diff_list) != 0:
