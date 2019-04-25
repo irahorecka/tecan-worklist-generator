@@ -452,7 +452,6 @@ class DNAFront(GridLayout):
                     global rack_seq 
                     global rack_type_seq 
                     type(sequence_vol)
-                    del(sequence_vol)
                     exec(open("SeqDNABackend.py").read(), globals(), globals())
                 except NameError:
                     os.chdir(back_direct)
