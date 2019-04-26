@@ -210,4 +210,4 @@ for filename in os.listdir(os.getcwd()):
             out_file.close()
 
     else:
-        continue
+        pass
