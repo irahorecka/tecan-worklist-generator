@@ -336,11 +336,11 @@ class DNAFront(GridLayout):
         self.inside6 = GridLayout()
         self.inside6.cols = 2
 
-        self.inside0.add_widget(Label(text = "[b]TECAN DNA Elution Volume[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.inside0.add_widget(Label(text = "[b]TECAN DNA Elution Volume (uL or NA)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
         self.elutionvol = TextInput(text = "100", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.elutionvol)
         
-        self.inside0.add_widget(Label(text = "[b]Dilution Type (TE or Water)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
+        self.inside0.add_widget(Label(text = "[b]Diluent (TE or Water)[/b]", markup = True, color = colorformat.label_color, font_size = fontsize.label_size))
         self.diltype = TextInput(text = "Water", multiline = False, font_size = fontsize.label_size)
         self.inside0.add_widget(self.diltype)
         
