@@ -52,11 +52,8 @@ def csv_from_excel(filename):
     csv_file = os.path.join(csv_direct, str(filename[:-5]) + '.csv')
     try:
         wb = xlrd.open_workbook(filename)
-        #find excel sheet of interest
         sh = wb.sheet_by_name('Report')
-        #open for writing ('w') and for generating new files ('+')
         your_csv_file = open(csv_file, 'w+', newline = '')
-        #set csv writer and write rows
         wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
 
         for rownum in range(sh.nrows):
