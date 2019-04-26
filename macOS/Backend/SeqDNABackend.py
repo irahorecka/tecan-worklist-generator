@@ -81,7 +81,12 @@ def worklist_gen(df):
     global fwd_primer
     global rev_primer
     df_mod = df
-    elution_v = float(elution_vol) - 50 #50uL dead volume
+    
+    try:
+        elution_v = float(elution_vol) - 50 #50uL dead volume
+    except ValueError:
+        #TECAN cannot pipette more than 9.99mL
+        elution_v = 9999
     dilution = float(dilution)
     final_vol = float(final_vol)
     sequence_vol = float(sequence_vol)
